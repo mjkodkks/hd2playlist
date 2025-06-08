@@ -2,18 +2,40 @@
     import PlayerBottomBar from '$lib/playerBottomBar.svelte';
     import { currentSongSrc , currentSongTitle} from '../store/store'
 
-    import { onMount } from 'svelte';
-
     currentSongSrc.set('/hd1.mp3');
     currentSongTitle.set('A Cup of Liber-tea');
     let songTitle = $currentSongTitle;
     let audioSrc = $currentSongSrc;
+    let animationDuration = 90; // seconds
+    // let animationDurationStyleDerived = $derived(() => {
+    //     return `zoomSlow ` + Math.floor(animationDuration) + 's' + ' infinite alternate';
+    // });
 
     let playerBottomBarComponent: PlayerBottomBar
+    let audioState = $state({
+        isPlaying: false
+    });
 
     $effect(() => {
         console.log('Current song title:', songTitle);
         console.log('Current audio source:', audioSrc);
+        const audoDummy = new Audio(audioSrc);
+        audoDummy.addEventListener('loadedmetadata', (event) => {
+            console.log('Audio duration:', audoDummy.duration);
+            animationDuration = Math.floor(audoDummy.duration);
+            // update :root css variable for animation duration
+            document.documentElement.style.setProperty('--animation-zoomout', `zoomSlow ${animationDuration}s infinite alternate`);
+        });
+
+        audioState = playerBottomBarComponent.onAudioState();
+        if (audioState) {
+            console.log('Audio state:', audioState.isPlaying);
+            if (audioState.isPlaying) {
+                document.documentElement.style.setProperty('--animation-play-state', 'running');
+            } else {
+                document.documentElement.style.setProperty('--animation-play-state', 'paused');
+            }
+        }
     });
 
 </script>
@@ -24,6 +46,10 @@
 </div>
 
 <style>
+    :root {
+        --animation-zoomout: none;
+        --animation-play-state: paused;
+    }
     :global(html) {
         height: 100%;
         margin: 0;
@@ -53,6 +79,7 @@
         overflow: hidden;
         position: relative;
         z-index: 0;
-        animation: zoomSlow 90s infinite alternate;
+        animation: var(--animation-zoomout);
+        animation-play-state: var(--animation-play-state);
     }
 </style>
