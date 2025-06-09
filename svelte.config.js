@@ -1,6 +1,11 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import adapter from '@sveltejs/adapter-static';
+import dotenv from 'dotenv';
 
+// Load environment variables from .env file
+dotenv.config();
+
+// Log the BASE_PATH from .env to verify it's loaded correctly
 console.log(`BASE_PATH from .env is: ${process.env.BASE_PATH}`)
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -19,7 +24,7 @@ const config = {
 			}
 		),
 		paths: {
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
+			base: process.env.BASE_PATH || '',
 			relative: false
 		}
 	}
