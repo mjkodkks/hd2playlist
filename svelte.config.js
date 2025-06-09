@@ -1,6 +1,8 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import adapter from '@sveltejs/adapter-static';
 
+console.log(`BASE_PATH from .env is: ${process.env.BASE_PATH}`)
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://svelte.dev/docs/kit/integrations
@@ -17,7 +19,8 @@ const config = {
 			}
 		),
 		paths: {
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
+			relative: false
 		}
 	}
 };

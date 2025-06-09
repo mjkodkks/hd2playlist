@@ -1,8 +1,9 @@
 <script lang="ts">
     import PlayerBottomBar from '$lib/playerBottomBar.svelte';
     import { currentSongSrc , currentSongTitle} from '../store/store'
+    import { base } from '$app/paths';
 
-    currentSongSrc.set('/hd1.mp3');
+    currentSongSrc.set(`${base}/hd1.mp3`);
     currentSongTitle.set('A Cup of Liber-tea');
     let songTitle = $currentSongTitle;
     let audioSrc = $currentSongSrc;
@@ -10,7 +11,6 @@
     // let animationDurationStyleDerived = $derived(() => {
     //     return `zoomSlow ` + Math.floor(animationDuration) + 's' + ' infinite alternate';
     // });
-
     let playerBottomBarComponent: PlayerBottomBar
     let audioState = $state({
         isPlaying: false
