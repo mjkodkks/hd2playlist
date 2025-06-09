@@ -13,9 +13,12 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(
 			{
-				fallback: '200.html' // This is useful for single-page applications
+				fallback: '404.html'
 			}
-		)
+		),
+		paths: {
+			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+		}
 	}
 };
 
